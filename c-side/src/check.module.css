@@ -1,0 +1,21 @@
+.h{
+  color:green;
+}
+.p1{
+  background-color:rgba(230,170,70,0.3);
+  color:white;
+  display: inline;
+  text-decoration: underline;
+  position: sticky;
+  left:140px;
+}
+.check{
+  background-color: rgba(10,154,220,0.5);
+  margin: 2px;
+  padding: 4px;
+  animation: anim 2s linear;
+}
+.img{
+  width:120px;
+  height: 120px;
+}
