@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import styles from "./foot.module.css";
 
 const Footer = () => {
@@ -14,7 +15,11 @@ const Footer = () => {
     setError(null);
     try {
       const res = await axios.get("http://localhost:5000/about");
-      setResponse(res.data);
+      const dataWithIds = res.data.map((item) => ({
+        ...item,
+        uniqueId: item._id || uuidv4(),
+      }));
+      setResponse(dataWithIds);
     } catch (err) {
       setError("Failed to fetch data");
     } finally {
@@ -24,12 +29,20 @@ const Footer = () => {
 
   // Submit new record to the backend
   const handleSubmit = async () => {
+    if (!formData.name || !formData.age || !formData.cgpa) {
+      alert("All fields are required.");
+      return;
+    }
+
     try {
       const res = await axios.post("http://localhost:5000/about", formData);
       console.log("Success:", res.data);
       fetchData(); // Refresh data after submission
+      setFormData({ name: "", age: "", cgpa: "" });
+      formData.name="";
     } catch (err) {
       console.error("Error:", err);
+      setError("Failed to submit data");
     }
   };
 
@@ -60,7 +73,7 @@ const Footer = () => {
           </thead>
           <tbody>
             {response.map((item) => (
-              <tr key={item._id}>
+              <tr key={item.uniqueId}>
                 <td>{item.name}</td>
                 <td>{item.age}</td>
                 <td>{item.cgpa}</td>
